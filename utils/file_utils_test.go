@@ -169,19 +169,19 @@ func Test_NewFileDirReader_Error(t *testing.T) {
 	t.Parallel()
 
 	rootDir := t.TempDir()
-	noPerm := os.FileMode(0000)
-	if err := os.WriteFile(filepath.Join(rootDir, "a.txt"), []byte("hello world!"), noPerm); err != nil {
+	rwxPerm := os.FileMode(0755)
+	if err := os.WriteFile(filepath.Join(rootDir, "a.txt"), []byte("hello world!"), rwxPerm); err != nil {
 		t.Fatalf("unexpected error while WriteFile %v", err)
 	}
-	if err := os.WriteFile(filepath.Join(rootDir, "z.txt"), []byte("hello world!"), noPerm); err != nil {
+	if err := os.WriteFile(filepath.Join(rootDir, "z.txt"), []byte("hello world!"), rwxPerm); err != nil {
 		t.Fatalf("unexpected error while WriteFile %v", err)
 	}
 	path := filepath.Join(rootDir, "sub")
+	noPerm := os.FileMode(0000)
 	if err := os.Mkdir(path, noPerm); err != nil {
 		t.Fatalf("unexpected error while Mkdir %v", err)
 	}
 
-	rwxPerm := os.FileMode(0755)
 	path = filepath.Join(rootDir, "sub_2")
 	if err := os.Mkdir(path, rwxPerm); err != nil {
 		t.Fatalf("unexpected error while Mkdir %v", err)
